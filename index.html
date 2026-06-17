@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indexa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────────
+       TOKENS
+    ───────────────────────────────────────────────── */
+    :root {
+      --bg:           #090a0f;
+      --card:         #0f1117;
+      --card-hover:   #131620;
+      --border:       #1a1d2e;
+      --border-hover: #272b40;
+      --text-1:       #eef0f8;
+      --text-2:       #6b7194;
+      --text-3:       #363a52;
+      --accent:       #4f6ef7;
+      --radius:       12px;
+      --transition:   160ms ease;
+      --font:         'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-1);
+      min-height: 100vh;
+      padding-bottom: 96px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─────────────────────────────────────────────────
+       HEADER
+    ───────────────────────────────────────────────── */
+    .header {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 64px 24px 52px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 52px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .header__left {}
+
+    /* Wordmark */
+    .wordmark {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -.04em;
+      color: var(--text-1);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .wordmark__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: blink 2.8s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: .25; }
+    }
+
+    .header__title {
+      font-size: clamp(30px, 5vw, 46px);
+      font-weight: 700;
+      letter-spacing: -.035em;
+      line-height: 1.08;
+      color: var(--text-1);
+      margin-bottom: 14px;
+    }
+
+    .header__title em {
+      font-style: normal;
+      color: var(--text-2);
+      font-weight: 300;
+    }
+
+    .header__sub {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.65;
+      max-width: 400px;
+    }
+
+    /* Contador derecho */
+    .header__count {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .header__count-num {
+      font-size: clamp(40px, 7vw, 64px);
+      font-weight: 700;
+      letter-spacing: -.04em;
+      color: var(--text-1);
+      line-height: 1;
+    }
+
+    .header__count-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+
+    /* ─────────────────────────────────────────────────
+       GRID
+    ───────────────────────────────────────────────── */
+    .grid-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    #grid-proyectos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    /* ─────────────────────────────────────────────────
+       TARJETA
+    ───────────────────────────────────────────────── */
+    .card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition:
+        background   var(--transition),
+        border-color var(--transition),
+        transform    var(--transition),
+        box-shadow   var(--transition);
+      animation: fadeUp 220ms ease both;
+    }
+
+    .card:hover {
+      background: var(--card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(0,0,0,.4);
+    }
+
+    /* Línea de acento superior al hover */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: -1px -1px auto;
+      height: 1px;
+      background: var(--accent);
+      border-radius: var(--radius) var(--radius) 0 0;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    /* Badge destacado */
+    .card--featured .card__badge {
+      display: inline-flex;
+    }
+
+    .card__badge {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+      padding: 3px 8px;
+      border-radius: 4px;
+      width: fit-content;
+      margin-bottom: 2px;
+    }
+
+    .card__badge-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* Cabecera */
+    .card__head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .card__title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      color: var(--text-1);
+      line-height: 1.3;
+    }
+
+    .card__arrow {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: var(--text-3);
+      transition: color var(--transition), transform var(--transition);
+      margin-top: 2px;
+    }
+
+    .card:hover .card__arrow {
+      color: var(--text-2);
+      transform: translate(2px, -2px);
+    }
+
+    .card__description {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    /* ─────────────────────────────────────────────────
+       AUTORES
+    ───────────────────────────────────────────────── */
+    .card__footer {
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .authors {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .authors__avatars {
+      display: flex;
+    }
+
+    /* Cada avatar se superpone ligeramente */
+    .avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    .avatar + .avatar { margin-left: -7px; }
+
+    /* Colores de avatar generados por índice */
+    .avatar--0 { background: #4f6ef7; }
+    .avatar--1 { background: #a78bfa; }
+    .avatar--2 { background: #34d399; }
+    .avatar--3 { background: #f472b6; }
+    .avatar--4 { background: #fb923c; }
+    .avatar--5 { background: #38bdf8; }
+
+    .authors__names {
+      font-size: 11.5px;
+      color: var(--text-2);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px;
+    }
+
+    .card__url {
+      font-size: 11px;
+      color: var(--text-3);
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 120px;
+      flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────────────
+       ANIMACIÓN
+    ───────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─────────────────────────────────────────────────
+       ESTADO VACÍO
+    ───────────────────────────────────────────────── */
+    .empty {
+      grid-column: 1 / -1;
+      padding: 80px 0;
+      text-align: center;
+      color: var(--text-3);
+      font-size: 14px;
+    }
+
+    /* ─────────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────────── */
+    .footer {
+      max-width: 1100px;
+      margin: 80px auto 0;
+      padding: 0 24px;
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer__brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      color: var(--text-3);
+    }
+
+    .footer__note {
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    /* ─────────────────────────────────────────────────
+       RESPONSIVO
+    ───────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .header { padding: 44px 20px 36px; align-items: flex-start; flex-direction: column; gap: 28px; }
+      .header__count { text-align: left; }
+      .grid-wrapper { padding: 0 16px; }
+      #grid-proyectos { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card { animation: none; }
+      .wordmark__dot { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__left">
+      <div class="wordmark">
+        <span class="wordmark__dot"></span>
+        Indexa
+      </div>
+      <h1 class="header__title">
+        Proyectos<br><em>en producción</em>
+      </h1>
+      <p class="header__sub">
+        Directorio de proyectos construidos por desarrolladores independientes.
+      </p>
+    </div>
+    <div class="header__count">
+      <div class="header__count-num" id="count-num">—</div>
+      <div class="header__count-label">proyectos</div>
+    </div>
+  </header>
+
+  <main class="grid-wrapper">
+    <div id="grid-proyectos"></div>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__brand">Indexa</span>
+    <span class="footer__note">Directorio abierto para desarrolladores independientes</span>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════
+       DATOS — el único lugar que debes editar
+
+       Para agregar un proyecto nuevo, copia el bloque
+       de uno existente, pega al final del array y
+       cambia los valores. Nada más.
+
+       Estructura de cada objeto:
+         id          → número único autoincremental
+         titulo      → nombre del proyecto (string)
+         descripcion → una o dos oraciones (string)
+         url         → enlace completo al proyecto (string)
+         destacado   → aparece con badge azul (boolean)
+         autores     → array de objetos { nombre, rol }
+                       Puede tener uno o varios autores.
+    ═══════════════════════════════════════════════════════ */
+    const proyectos = [
+      {
+        id: 1,
+        titulo: "PI-FORM",
+        descripcion: "Plataforma de formularios inteligentes para instituciones y desarrolladores. Automatiza el análisis de proyectos.",
+        url: "https://joseluisrt2007.github.io/PI-Form/",
+        destacado: true,
+        autores: [
+          { nombre: "Dr. Salvador González García", rol: "Project Manager"},
+          { nombre: "José Luis Rodríguez Téllez", rol: "Lead Dev"}
+        ]
+      },
+      {
+        id: 2,
+        titulo: "PromediaTec",
+        descripcion: "Calculadora académica para estudiantes de nivel universitario del ITESM. Simula escenarios y proyecta el promedio final del período.",
+        url: "https://joseluisrt2007.github.io/PromediaTec/",
+        destacado: true,
+        autores: [
+          { nombre: "José Luis Rodríguez Téllez", rol: "Project Manager" }
+        ]
+      },
+      {
+        id: 3,
+        titulo: "Duks In The Garden",
+        descripcion: "Juego estilo pixel art para niños. Ayuda a mejorar la memoria visual de forma interactiva y divertida para los niños.",
+        url: "https://joseluisrt2007.github.io/Ducks-In-The-Garden/",
+        destacado: true,
+        autores: [
+          { nombre: "Juan Jordan", rol: "Lead Dev" },
+          { nombre: "Cristiano Gerardo", rol: "Full Stack Dev" },
+          { nombre: "Alessa Castellanos", rol: "Creative Designer" },
+          { nombre: "José Luis", rol: "DevOps" }
+        ]
+      }
+    ];
+
+
+    /* ═══════════════════════════════════════════════════════
+       UTILIDADES
+    ═══════════════════════════════════════════════════════ */
+
+    function cleanUrl(url) {
+      try { return new URL(url).hostname.replace(/^www\./, ''); }
+      catch { return url; }
+    }
+
+    /* Iniciales a partir del nombre completo */
+    function initials(nombre) {
+      return nombre
+        .split(' ')
+        .slice(0, 2)
+        .map(w => w[0])
+        .join('')
+        .toUpperCase();
+    }
+
+    /* Nombres para mostrar junto a los avatares */
+    function authorLabel(autores) {
+      if (autores.length === 0) return '';
+      if (autores.length === 1) return autores[0].nombre;
+      if (autores.length === 2) return `${autores[0].nombre} & ${autores[1].nombre}`;
+      return `${autores[0].nombre} +${autores.length - 1}`;
+    }
+
+    /* HTML de los avatares apilados */
+    function renderAvatars(autores) {
+      return autores
+        .slice(0, 4) // máximo 4 avatares visibles
+        .map((a, i) => `<div class="avatar avatar--${i % 6}" title="${a.nombre} · ${a.rol}">${initials(a.nombre)}</div>`)
+        .join('');
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       RENDER
+    ═══════════════════════════════════════════════════════ */
+    function render() {
+      const grid = document.getElementById('grid-proyectos');
+
+      // Destacados primero, luego por id
+      const ordenados = [...proyectos].sort((a, b) => {
+        if (a.destacado && !b.destacado) return -1;
+        if (!a.destacado &&  b.destacado) return  1;
+        return a.id - b.id;
+      });
+
+      if (ordenados.length === 0) {
+        grid.innerHTML = '<div class="empty">Aún no hay proyectos registrados.</div>';
+        return;
+      }
+
+      grid.innerHTML = ordenados.map((p, i) => `
+        <a
+          href="${p.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card${p.destacado ? ' card--featured' : ''}"
+          style="animation-delay:${i * 50}ms"
+          aria-label="Abrir ${p.titulo}"
+        >
+          ${p.destacado ? `
+          <div class="card__badge">
+            <span class="card__badge-dot"></span>
+            Destacado
+          </div>` : ''}
+
+          <div class="card__head">
+            <h2 class="card__title">${p.titulo}</h2>
+            <svg class="card__arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 13L13 3M13 3H6M13 3v7"/>
+            </svg>
+          </div>
+
+          <p class="card__description">${p.descripcion}</p>
+
+          <div class="card__footer">
+            <div class="authors">
+              <div class="authors__avatars">
+                ${renderAvatars(p.autores)}
+              </div>
+              <span class="authors__names">${authorLabel(p.autores)}</span>
+            </div>
+            <span class="card__url">${cleanUrl(p.url)}</span>
+          </div>
+        </a>
+      `).join('');
+
+      // Contador en header
+      document.getElementById('count-num').textContent =
+        String(proyectos.length).padStart(2, '0');
+    }
+
+    render();
+  </script>
+</body>
+</html>
