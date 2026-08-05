@@ -1,0 +1,13 @@
+SOBRE ESTOS ARCHIVOS
+=====================
+
+logo.png      -> Logo generado para "Indexa", usado en el header (esquina superior izquierda).
+favicon.png   -> Versión pequeña del logo, usada como ícono de pestaña del navegador.
+
+¿QUIERES CAMBIAR EL LOGO?
+Reemplaza logo.png (y opcionalmente favicon.png) por tu propia imagen, manteniendo
+el mismo nombre de archivo. Si prefieres otro nombre o formato (.jpg, .svg),
+actualiza la ruta "assets/logo.png" dentro de index.html.
+
+Si el archivo no existe o no carga, la página no se rompe: aparece el punto azul
+original como respaldo automático.
